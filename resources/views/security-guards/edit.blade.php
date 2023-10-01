@@ -20,7 +20,7 @@
                   <div class="col-xl-12">
                     <div class="card-body p-md-5 text-black">
                       <h3 class="mb-5 text-uppercase">Edit Security form</h3>
-                    <form  method="post" action="{{route('security-guards.update', $securityGuard->id)}}">
+                    <form  method="post" action="{{route('security-guards.update', $securityGuard->id)}}" enctype="multipart/form-data">
                         @csrf
                          @method('put')
                       <div class="row">
