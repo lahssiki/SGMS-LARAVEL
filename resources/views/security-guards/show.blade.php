@@ -41,13 +41,13 @@
                                                 <p>Created At : {{ $securityGuard->created_at->format('Y-m-d') }}</p>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
+                                        <div class="col-md-6 mb-4 ">
+                                            <div class="form-outline ">
                                                 <img src="{{ asset('storage/' . $securityGuard->image) }}"
-                                                    alt="{{ $securityGuard->fullname }}" class="img-fluid">
+                                                    alt="{{ $securityGuard->fullname }}" class=" w-50">
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-end pt-3">
+                                        <div class="d-flex justify-content-end pt-3 ">
                                             <a href="{{ route('security-guards.index')}}" class="btn btn-primary">Ok</a>
                                         </div>
                                     </div>
