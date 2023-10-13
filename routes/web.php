@@ -26,7 +26,6 @@ Route::delete('/security-guards/{id}',[SecurityGuardController::class, 'destroy'
 Route::resource('security-guards',SecurityGuardController::class);
 
 
-
 Route::get('/register', [AuthController::class, 'register'])->name('login.register');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
 

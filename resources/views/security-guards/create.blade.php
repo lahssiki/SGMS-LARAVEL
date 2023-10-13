@@ -46,8 +46,8 @@
                                                     <option selected disabled>Categorie</option>
                                                     <option value="chef">chef</option>
                                                     <option value="Security">Security</option>
-                                                  </select>
-                                        </div>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="">
                                             <div class="form-outline">

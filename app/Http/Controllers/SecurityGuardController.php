@@ -11,8 +11,9 @@ class SecurityGuardController extends Controller
     public function index()
     {
         $securityGuards = SecurityGuard::all();
-    
-        return view('security-guards.index', compact('securityGuards'));
+        $ipAddress = request()->ip();
+
+        return view('security-guards.index', compact('securityGuards','ipAddress'));
     }
     
     public function create(){

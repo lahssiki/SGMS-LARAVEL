@@ -1,5 +1,6 @@
 @extends('layouts.default')
 @section('content')
+
 <div>
     <h6 class="text-center">Security Guard Management</h6>
     <table  class="table table-hover" >
@@ -13,7 +14,6 @@
             <th>Details</th>
             <th>Edit</th>
             <th>Delete</th>
-
 
             @foreach ($securityGuards as $item )
                 <tr>
@@ -30,11 +30,11 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form></td>
-
-                   
                 </tr>
             @endforeach
         </tr>
     </table>
 </div>
+<div class="text-center">Adresse IP de l'utilisateur : {{ $ipAddress }}</div>
+
 @endsection
