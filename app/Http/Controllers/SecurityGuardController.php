@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\SecurityGuard;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+
 
 
 class SecurityGuardController extends Controller
@@ -17,9 +19,13 @@ class SecurityGuardController extends Controller
     }
     
     public function create(){
+        if (Gate::allows('manage-posts')) {
         $categories = SecurityGuard::distinct('categorie')->pluck('categorie');
 
         return view('security-guards.create', compact('categories'));
+    } else {
+        abort(403, 'Permission denied');
+    }
     }
 
     public function store(Request $request)
@@ -53,9 +59,13 @@ public function show($id)
 }
 public function edit($id)
 {
+    if (Gate::allows('manage-posts')) {
     $securityGuard = SecurityGuard::findOrFail($id);
 
     return view('security-guards.edit', compact('securityGuard'));
+} else {
+    abort(403, 'Permission denied');
+}
 }
 
 public function update(Request $request, $id)
@@ -78,11 +88,15 @@ public function update(Request $request, $id)
 }
 public function destroy($id)
 {
+    if (Gate::allows('manage-posts')) {
     $securityGuard = SecurityGuard::findOrFail($id);
     $securityGuard->delete();
 
     return redirect()->route('security-guards.index')
         ->with('success', 'Security Guard deleted successfully');
+    } else {
+        abort(403, 'Permission denied');
+    }
 }
 
 
