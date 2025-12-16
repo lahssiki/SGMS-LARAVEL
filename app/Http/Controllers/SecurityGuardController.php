@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SecurityGuard;
 use Illuminate\Http\Request;
+use App\Models\SecurityGuard;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -13,9 +15,12 @@ class SecurityGuardController extends Controller
     public function index()
     {
         $securityGuards = SecurityGuard::all();
-        $ipAddress = request()->ip();
+        
+        $categories = SecurityGuard::select('categorie', DB::raw('count(*) as total'))
+        ->groupBy('categorie')
+        ->pluck('total', 'categorie');
 
-        return view('security-guards.index', compact('securityGuards','ipAddress'));
+        return view('security-guards.index', compact('securityGuards', 'categories'));
     }
     
     public function create(){
@@ -70,21 +75,35 @@ public function edit($id)
 
 public function update(Request $request, $id)
 {
-    // Validez les données du formulaire
+    $securityGuard = SecurityGuard::findOrFail($id);
+
+    // Validation
     $validatedData = $request->validate([
-        'fullname' => 'required',
-        'cin' => 'required|unique:security_guards,cin,'.$id, // Assurez-vous d'exclure l'enregistrement actuel de la validation unique
-        'adresse' => 'required|string|max:255',
-        'image' => 'nullable|image',
+        'fullname'  => 'required|string|max:255',
+        'cin'       => 'required|unique:security_guards,cin,' . $id,
+        'adresse'   => 'required|string|max:255',
+        'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         'categorie' => 'required|in:chef,Security',
     ]);
 
-    // Mettez à jour les données de l'agent de sécurité
-    $securityGuard = SecurityGuard::findOrFail($id);
+    // ✅ Gestion de l’image
+    if ($request->hasFile('image')) {
+
+        // Supprimer l’ancienne image si existe
+        if ($securityGuard->image && Storage::disk('public')->exists($securityGuard->image)) {
+            Storage::disk('public')->delete($securityGuard->image);
+        }
+
+        // Enregistrer la nouvelle image
+        $validatedData['image'] = $request->file('image')->store('guards', 'public');
+    }
+
+    // ✅ Mise à jour en une seule fois
     $securityGuard->update($validatedData);
 
-    // Redirigez l'utilisateur vers la page de détails ou d'affichage de la liste
-    return redirect()->route('security-guards.show', $id)->with('success', 'Security Guard updated successfully');
+    return redirect()
+        ->route('security-guards.show', $securityGuard->id)
+        ->with('success', 'Security Guard updated successfully');
 }
 public function destroy($id)
 {

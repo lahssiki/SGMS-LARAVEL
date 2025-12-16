@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
     Gate::define('manage-posts', function ($user) {
-        return $user->id === 1;
+        return $user->id === 2;
     });
     }
 }
