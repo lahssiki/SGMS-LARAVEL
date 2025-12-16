@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SecurityGuardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SecurityGuardController;
+use App\Http\Controllers\WeeklyPlanningController;
 
 
 /*
@@ -25,6 +26,12 @@ Route::delete('/security-guards/{id}',[SecurityGuardController::class, 'destroy'
 */
 Route::resource('security-guards',SecurityGuardController::class);
 
+Route::get('/weekly-plannings', [WeeklyPlanningController::class, 'index'])->name('weekly-plannings.index');
+Route::get('/weekly-plannings/create', [WeeklyPlanningController::class, 'create'])->name('weekly-plannings.create');
+Route::post('/weekly-plannings', [WeeklyPlanningController::class, 'store'])->name('weekly-plannings.store');
+Route::get('/weekly-plannings/{id}/edit', [WeeklyPlanningController::class, 'edit'])->name('weekly-plannings.edit');
+Route::put('/weekly-plannings/{id}', [WeeklyPlanningController::class, 'update'])->name('weekly-plannings.update');
+    
 
 Route::get('/register', [AuthController::class, 'register'])->name('login.register');
 Route::post('/register', [AuthController::class, 'registerPost'])->name('register');

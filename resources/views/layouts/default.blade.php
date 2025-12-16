@@ -25,8 +25,11 @@
               <li class="nav-item" >
                 <a class="nav-link active" aria-current="page" href="{{ route('security-guards.create')}}">Create</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ route('login.register')}}">Register</a>
+               <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ route('weekly-plannings.index')}}">Planning</a>
+              </li>
+               <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ route('weekly-plannings.create')}}">Create Planning</a>
               </li>
             </ul>
             <h6 class="m-2">{{ Auth::user()->name }}</h6>
@@ -34,7 +37,11 @@
               @csrf
               @method('DELETE')
               <button class="btn btn-secondary" type="submit">Logout</button>
+              
           </form>
+          <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ route('login.register')}}">Register</a>
+              </li>
         </div>
       </nav>
       <div>
