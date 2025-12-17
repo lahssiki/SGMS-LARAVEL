@@ -2,54 +2,71 @@
 
 @section('content')
 <div class="container">
-    <h6 class="text-center mb-4">Security Guard Management</h6>
+    <h4 class="text-center mb-4">📊 Security Guard Dashboard</h4>
 
     <div class="row">
+
         <!-- TABLE -->
         <div class="col-md-8">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Fullname</th>
-                        <th>CIN</th>
-                        <th>Adresse</th>
-                        <th>Catégorie</th>
-                        <th>Created</th>
-                        <th colspan="3">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach ($securityGuards as $item)
-                    <tr>
-                        <td>{{ $item->id }}</td>
-                        <td>{{ $item->fullname }}</td>
-                        <td>{{ $item->cin }}</td>
-                        <td>{{ $item->adresse }}</td>
-                        <td>{{ $item->categorie }}</td>
-                        <td>{{ $item->created_at->format('Y-m-d') }}</td>
-                        <td>
-                            <a href="{{ route('security-guards.show', $item->id) }}" class="btn btn-sm btn-primary">Détails</a>
-                        </td>
-                        <td>
-                            <a href="{{ route('security-guards.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        </td>
-                        <td>
-                            <form action="{{ route('security-guards.destroy', $item->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    Guards List
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Fullname</th>
+                                <th>CIN</th>
+                                <th>Adresse</th>
+                                <th>Catégorie</th>
+                                <th>Created</th>
+                                <th colspan="3" class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($securityGuards as $item)
+                            <tr>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->fullname }}</td>
+                                <td>{{ $item->cin }}</td>
+                                <td>{{ $item->adresse }}</td>
+                                <td>
+                                    <span class="badge {{ $item->categorie=='chef' ? 'bg-primary' : 'bg-success' }}">
+                                        {{ $item->categorie }}
+                                    </span>
+                                </td>
+                                <td>{{ $item->created_at->format('Y-m-d') }}</td>
+                                <td>
+                                    <a href="{{ route('security-guards.show', $item->id) }}"
+                                       class="btn btn-sm btn-primary">View</a>
+                                </td>
+                                <td>
+                                    <a href="{{ route('security-guards.edit', $item->id) }}"
+                                       class="btn btn-sm btn-warning">Edit</a>
+                                </td>
+                                <td>
+                                    <form action="{{ route('security-guards.destroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Delete this guard?')">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <!-- CHART -->
+        <!-- DASHBOARD STAT -->
         <div class="col-md-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-header text-center">
                     Guards by Category
                 </div>
@@ -58,6 +75,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 @endsection
@@ -85,6 +103,5 @@ new Chart(ctx, {
     }
 });
 </script>
-
 @endsection
 

@@ -1,72 +1,97 @@
 @extends('layouts.default')
 
-<body>
-    @section('content')
-    <div>
-    </div>
-    <section class="h-80 bg-dark">
-        <div class="container py-3 h-80">
-            <div class="row d-flex justify-content-center align-items-center h-80">
-                <div class="col">
-                    <div class="card card-registration my-4">
-                        <div class="row g-0">
-                            <div class="col-xl-12">
-                                <div class="card-body p-md-5 text-black">
-                                    <h3 class="mb-5 text-uppercase">Security registration form</h3>
-                                    <form method="post" action="{{ route('security-guards.store') }}"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        @method('post')
-                                        <div class="row">
-                                            <div class="col-md-6 mb-4">
-                                                <div class="form-outline">
-                                                    <input type="text" name="fullname"
-                                                        class="form-control form-control-lg" />
-                                                    <label class="form-label">Full name</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-4">
-                                                <div class="form-outline">
-                                                    <input type="text" name="cin"
-                                                        class="form-control form-control-lg" />
-                                                    <label class="form-label">CIN</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-outline mb-4">
-                                            <input type="text" name="adresse" class="form-control form-control-lg" />
-                                            <label class="form-label">Address</label>
-                                        </div>
-                                        <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                                        <!-- <input  name="categorie" class="form-control form-control-lg" />-->
-                                            <div class="col-md-6 mb-1">
-                                                <select class="form-select" name="categorie" aria-label="Default select example">
-                                                    <option selected disabled>Categorie</option>
-                                                    <option value="chef">chef</option>
-                                                    <option value="Security">Security</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="">
-                                            <div class="form-outline">
-                                                <input type="file" name="image" class="form-control form-control-lg" />
-                                                <label class="form-label">Photo</label>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end pt-3">
-                                            <button type="submit" class="btn btn-success btn-lg ms-2">Submit
-                                                form</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+@section('content')
+<section class="bg-light py-4">
+    <div class="container">
+
+        <div class="card shadow">
+            <div class="card-body p-4">
+
+                <h3 class="mb-4 text-center text-uppercase">
+                    Security Registration Form
+                </h3>
+
+                {{-- Errors --}}
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST"
+                      action="{{ route('security-guards.store') }}"
+                      enctype="multipart/form-data">
+
+                    @csrf
+
+                    <div class="row">
+                        <!-- Full Name -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text"
+                                   name="fullname"
+                                   value="{{ old('fullname') }}"
+                                   class="form-control"
+                                   required>
+                        </div>
+
+                        <!-- CIN -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CIN</label>
+                            <input type="text"
+                                   name="cin"
+                                   value="{{ old('cin') }}"
+                                   class="form-control"
+                                   required>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text"
+                                   name="adresse"
+                                   value="{{ old('adresse') }}"
+                                   class="form-control">
+                        </div>
+
+                        <!-- Category -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="categorie" class="form-select" required>
+                                <option value="" disabled selected>Select category</option>
+                                <option value="chef" {{ old('categorie')=='chef' ? 'selected' : '' }}>Chef</option>
+                                <option value="Security" {{ old('categorie')=='Security' ? 'selected' : '' }}>Security</option>
+                            </select>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Photo</label>
+                            <input type="file"
+                                   name="image"
+                                   class="form-control">
                         </div>
                     </div>
-                </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <a href="{{ route('security-guards.index') }}"
+                           class="btn btn-secondary">Cancel</a>
+
+                        <button type="submit"
+                                class="btn btn-success">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+
             </div>
         </div>
-    </section>
-    @endsection
-</body>
+
+    </div>
+</section>
+@endsection

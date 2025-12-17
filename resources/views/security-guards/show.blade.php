@@ -1,63 +1,88 @@
 @extends('layouts.default')
 
 @section('content')
-    <section class="h-80 bg-dark">
-        <div class="container py-3 h-80">
-            <div class="row d-flex justify-content-center align-items-center h-80">
-                <div class="col">
-                    <div class="card card-registration my-4">
-                        <div class="row g-0">
-                            <div class="col-xl-12">
-                                <div class="card-body p-md-5 text-black">
-                                    <h1>Security Guard Details</h1>
-                                    <div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-4">
-                                                <div class="form-outline">
-                                                    <p>ID : {{ $securityGuard->id }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-4">
-                                                <div class="form-outline">
-                                                    <p>Full Name : {{ $securityGuard->fullname }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-outline mb-4">
-                                            <p>CIN : {{ $securityGuard->cin }}</p>
-                                        </div>
-                                        <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                                            <p>Address : {{ $securityGuard->adresse }}</p>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <p>Category : {{ $securityGuard->categorie }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <p>Created At : {{ $securityGuard->created_at->format('Y-m-d') }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-4 ">
-                                            <div class="form-outline ">
-                                                <img src="{{ asset('storage/' . $securityGuard->image) }}"
-                                                    alt="{{ $securityGuard->fullname }}" class=" w-50">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end pt-3 ">
-                                            <a href="{{ route('security-guards.index')}}" class="btn btn-primary">Ok</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </section>
+<section class="bg-light py-4">
+<div class="container">
+
+<div class="card shadow">
+<div class="card-body">
+
+<h3 class="mb-4 text-center">Security Guard Details</h3>
+
+<div class="row">
+    <div class="col-md-4 text-center">
+        @if($securityGuard->image)
+            <img src="{{ asset('storage/'.$securityGuard->image) }}"
+                 class="img-fluid rounded mb-3"
+                 style="max-height:250px">
+        @else
+            <img src="{{ asset('images/default-user.png') }}"
+                 class="img-fluid rounded mb-3">
+        @endif
+    </div>
+
+    <div class="col-md-8">
+        <p><strong>ID:</strong> {{ $securityGuard->id }}</p>
+        <p><strong>Full Name:</strong> {{ $securityGuard->fullname }}</p>
+        <p><strong>CIN:</strong> {{ $securityGuard->cin }}</p>
+        <p><strong>Address:</strong> {{ $securityGuard->adresse ?? '---' }}</p>
+        <p><strong>Category:</strong>
+            <span class="badge bg-info">{{ $securityGuard->categorie }}</span>
+        </p>
+        <p><strong>Created At:</strong> {{ $securityGuard->created_at->format('Y-m-d') }}</p>
+    </div>
+</div>
+
+<hr>
+<h4 class="mt-4">Weekly Planning</h4>
+
+@if($plannings->isEmpty())
+    <div class="alert alert-warning">No planning found for this guard.</div>
+@else
+<table class="table table-bordered text-center">
+<thead class="table-dark">
+<tr>
+    <th>Week</th>
+    <th>Mon</th>
+    <th>Tue</th>
+    <th>Wed</th>
+    <th>Thu</th>
+    <th>Fri</th>
+    <th>Sat</th>
+    <th>Sun</th>
+</tr>
+</thead>
+<tbody>
+@foreach($plannings as $p)
+<tr>
+    <td>{{ $p->week_start }}</td>
+    <td>{{ $p->monday ?? 'Off' }}</td>
+    <td>{{ $p->tuesday ?? 'Off' }}</td>
+    <td>{{ $p->wednesday ?? 'Off' }}</td>
+    <td>{{ $p->thursday ?? 'Off' }}</td>
+    <td>{{ $p->friday ?? 'Off' }}</td>
+    <td>{{ $p->saturday ?? 'Off' }}</td>
+    <td>{{ $p->sunday ?? 'Off' }}</td>
+</tr>
+@endforeach
+</tbody>
+</table>
+@endif
+<div class="d-flex justify-content-end gap-2">
+    <a href="{{ route('security-guards.edit',$securityGuard->id) }}"
+       class="btn btn-warning">Edit</a>
+
+    <a href="{{ route('weekly-plannings.create',['guard'=>$securityGuard->id]) }}"
+       class="btn btn-success">Add Planning</a>
+
+    <a href="{{ route('security-guards.index') }}"
+       class="btn btn-secondary">Back</a>
+</div>
+
+</div>
+</div>
+
+</div>
+</section>
 @endsection
+

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SecurityGuard;
+use App\Models\WeeklyPlanning;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -14,13 +15,23 @@ class SecurityGuardController extends Controller
 {
     public function index()
     {
-        $securityGuards = SecurityGuard::all();
-        
-        $categories = SecurityGuard::select('categorie', DB::raw('count(*) as total'))
-        ->groupBy('categorie')
-        ->pluck('total', 'categorie');
+        // Total des agents
+        $totalGuards = SecurityGuard::count();
 
-        return view('security-guards.index', compact('securityGuards', 'categories'));
+        // Statistiques par catégorie
+        $categories = SecurityGuard::select('categorie')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('categorie')
+            ->pluck('total', 'categorie');
+
+        // Liste des agents
+        $securityGuards = SecurityGuard::latest()->get();
+
+        return view('security-guards.index', compact(
+            'securityGuards',
+            'totalGuards',
+            'categories'
+        ));
     }
     
     public function create(){
@@ -59,7 +70,10 @@ public function show($id)
 {
     $securityGuard = SecurityGuard::findOrFail($id);
 
-    return view('security-guards.show', compact('securityGuard'));
+    $plannings = WeeklyPlanning::where('security_guard_id', $id)
+        ->orderBy('week_start', 'desc')
+        ->get();
+    return view('security-guards.show', compact('securityGuard', 'plannings'));
     
 }
 public function edit($id)
